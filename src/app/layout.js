@@ -1,14 +1,16 @@
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+import { Kalam, Patrick_Hand } from "next/font/google";
+import { Toaster } from "react-hot-toast";
+const kalam = Kalam({
   subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-kalam",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const patrickHand = Patrick_Hand({
   subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-patrick",
 });
 
 export const metadata = {
@@ -20,9 +22,12 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${kalam.variable} ${patrickHand.variable}`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-screen flex flex-col">
+        {children}
+        <Toaster position="top-center" />
+      </body>
     </html>
   );
 }

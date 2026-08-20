@@ -1,36 +1,62 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🐱 drawWithBingus
 
-## Getting Started
+> 🚧 **Under Construction** 🚧
+> This project is a work in progress — things will change and break.
 
-First, run the development server:
+## What is this?
+
+A drawing contest website where you race against the clock — and against **Bingus**, a cat 🐱, to sketch a random prompt.
+
+- You get a **random prompt** each time you play
+- You have **90 seconds** to draw it on a canvas
+- **Bingus's drawing** is a pre-made image for that same prompt (drawn from our own 2D animation art, no AI generation)
+- Once submitted, your drawing goes into a public **gallery**
+- Other users can **vote and comment** on submissions whenever they're online — no live judging, just async community feedback
+
+## How it works
+
+1. Start a challenge → get a random prompt
+2. Draw on the canvas before the 90-second timer runs out (auto-submits at 0)
+3. Your drawing is uploaded and saved alongside Bingus's drawing for that prompt
+4. Browse the gallery, vote, and comment on other people's submissions
+
+## Tech
+
+- **Frontend:** Next.js (App Router), Tailwind CSS
+- **Drawing:** HTML5 Canvas (mouse + touch support)
+- **Image storage:** Cloudinary (unsigned upload)
+- **Auth:** Shared with the existing login/signup setup
+
+## Status
+
+| Feature                               | Status             |
+| ------------------------------------- | ------------------ | ---------------- |
+| Auth (login/signup)                   | ✅ Done            |
+| Shared auth layout `(auth)/layout.js` | ✅ Done            |
+| Random prompt system                  | ✅ Done            |
+| Canvas drawing + 90s timer            | ✅ Done            |
+| Cloudinary upload                     |                    | 🚧 Not built yet |
+| Submission API (`/api/submissions`)   | 🚧 Not built yet   |
+| Gallery / voting / comments           | 🚧 Not built yet   |
+| Bingus's drawings per prompt          | 🚧 Not sourced yet |
+
+## Setup
+
+```bash
+npm install
+```
+
+Add these to your `.env.local`:
+
+```
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=your_cloud_name
+NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET=your_unsigned_preset
+```
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+_More to come as this gets built out._
