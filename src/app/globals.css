@@ -28,3 +28,7 @@ body {
   color: var(--foreground);
   font-family: var(--font-patrick), sans-serif;
 }
+
+.text-outline {
+  -webkit-text-stroke: 3px black;
+}

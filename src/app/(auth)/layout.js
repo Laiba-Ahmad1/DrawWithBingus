@@ -59,7 +59,7 @@ export default function AuthLayout({ children }) {
       rc.rectangle(3, 3, width - 6, height - 6, {
         stroke: "black",
         strokeWidth: 3,
-        roughness: 1.5,
+        roughness: 4.5,
       });
     };
 
