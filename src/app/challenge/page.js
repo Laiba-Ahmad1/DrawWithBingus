@@ -1,7 +1,9 @@
 "use client";
 
 import { useRef, useState, useEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import rough from "roughjs";
+import toast from "react-hot-toast";
 
 // ── Prompts + "computer" (pre-made) drawings ────────────────────────────────
 // Each prompt maps to a pre-made drawing image (drawn by you/Bingus ahead of
@@ -42,7 +44,8 @@ const BRUSH_SIZES = [
   { label: "XL", width: 14 },
 ];
 
-export default function DrawingChallenge({ onSubmit, onPost }) {
+export default function DrawingChallenge() {
+  const router = useRouter();
   // game phases: "ready" -> "drawing" -> "done"
   const [phase, setPhase] = useState("ready");
   const [challenge, setChallenge] = useState(null);
@@ -214,13 +217,6 @@ export default function DrawingChallenge({ onSubmit, onPost }) {
     if (canvas) {
       const dataUrl = canvas.toDataURL("image/png");
       setUserDrawingUrl(dataUrl);
-
-      // Hand the raw PNG data up to a parent — that's where you'd upload it
-      // to Cloudinary/S3 and save the resulting URL + prompt to your DB,
-      // per how you set up storage for this project.
-      if (onSubmit) {
-        onSubmit({ prompt: challenge.prompt, imageDataUrl: dataUrl });
-      }
     }
     setPhase("done");
   };
@@ -230,10 +226,27 @@ export default function DrawingChallenge({ onSubmit, onPost }) {
   // ── Posting is a separate, optional step from submitting: finishRound()
   // always fires onSubmit so you can save the drawing either way, but
   // onPost only fires if the user actively chooses to put it up for voting.
-  const postForVoting = () => {
-    setPosted(true);
-    if (onPost) {
-      onPost({ prompt: challenge.prompt, imageDataUrl: userDrawingUrl });
+  const postForVoting = async () => {
+    try {
+      const res = await fetch("/api/challenge", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({  
+        prompt: challenge.prompt,
+        userDrawing: userDrawingUrl,
+        computerDrawing: challenge.computerDrawing
+      })
+    });
+      const data = await res.json();
+      if (!res.ok) {
+        console.error("Post failed:", data.error);
+        return;
+      }
+      setPosted(true);
+      toast.success("Posted for voting! Other users can vote once they're online.");
+      router.push("/posts");
+    } catch (err) {
+      console.error("Post failed:", err);
     }
   };
 
