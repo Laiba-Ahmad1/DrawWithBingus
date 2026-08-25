@@ -2,8 +2,17 @@
 
 import { useEffect, useRef } from "react";
 import rough from "roughjs";
+import { usePathname } from "next/navigation";
+
+const images = {
+  "/login": "/login-art.png",
+  "/signup": "/signup-art.png",
+  "/robot": "/robot-check-art.png",
+};
 
 export default function AuthLayout({ children }) {
+  const pathname = usePathname();
+  const imageSrc = images[pathname];
   const bgCanvasRef = useRef(null);
   const borderCanvasRef = useRef(null);
   const cardRef = useRef(null);
@@ -75,16 +84,29 @@ export default function AuthLayout({ children }) {
         className="fixed inset-0 pointer-events-none"
         style={{ zIndex: 0 }}
       />
-
+      <div
+        className="absolute left-30 w-[300px] h-[500px] bottom-0  hidden lg:block"
+        style={{ zIndex: 10 }}
+      >
+        <img src={imageSrc} alt="" className="h-full w-full object-contain" />
+      </div>
+      <div
+        className="absolute  w-[300px] h-[300px] top-4 block lg:hidden"
+        style={{ zIndex: 1 }}
+      >
+        <img src={imageSrc} alt="" className="h-full w-full object-contain" />
+      </div>
       <div
         ref={cardRef}
-        className="relative w-full sm:max-w-md lg:w-[30%] min-h-[580px] bg-zinc-50 flex flex-col items-center gap-6 justify-center px-4 py-8 sm:gap-10 sm:px-8"
+        className="relative w-full sm:max-w-md lg:w-[30%] min-h-[480px] lg:min-h-[580px] bg-zinc-50 flex flex-col items-center gap-6 justify-center px-4 py-8 sm:gap-10 sm:px-8"
         style={{ zIndex: 1 }}
       >
         <canvas
           ref={borderCanvasRef}
           className="absolute inset-0 w-full h-full pointer-events-none"
+          style={{ zIndex: 10 }}
         />
+
         {children}
       </div>
     </main>

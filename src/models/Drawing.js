@@ -10,9 +10,9 @@ const drawingSchema = new mongoose.Schema({
   userDrawingUrl: { type: String, required: true }, // Cloudinary URL
   computerDrawingUrl: { type: String, required: true }, // Bingus's pre-made drawing for this prompt
   votes: {
-    user: { type: Number, default: 0 },
-    computer: { type: Number, default: 0 },
-  },
+  user: { type: Number, default: 0 },
+},
+  votedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "Users" }], // NEW
   createdAt: { type: Date, default: Date.now },
 });
 const Drawings =

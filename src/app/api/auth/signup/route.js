@@ -33,7 +33,7 @@ export async function POST(req) {
       return NextResponse.json(
         {
           status: false,
-          message: "Account already created",
+          message: "Account already exists with this email",
         },
         { status: 400 }
       );

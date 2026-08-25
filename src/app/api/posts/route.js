@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import db from "@/lib/db";
 import Drawing from "@/models/Drawing";
-
+import { getCurrentUser } from "@/lib/getCurrentuser";
 
 //gets all the drawing plus populates the userId field with the name of the user who posted it
 export async function GET() {
@@ -12,34 +12,44 @@ export async function GET() {
   return NextResponse.json({ status: true, drawings });
 }
 
-// PATCH ?id=<drawingId>  body: { votedFor: "user" | "computer" }
-// Uses a query param instead of a [id]/route.js folder so voting and
-// listing can live in one file, per your "fewer files" preference.
 export async function PATCH(req) {
   const { searchParams } = new URL(req.url);
   const id = searchParams.get("id");
-  const { votedFor } = await req.json();
 
-  if (!id || (votedFor !== "user" && votedFor !== "computer")) {
+  if (!id) {
     return NextResponse.json(
-      { status: false, message: "Missing id or invalid votedFor" },
-      { status: 400 }
+      { status: false, message: "Missing id" },
+      { status: 400 },
+    );
+  }
+
+  const currentUser = await getCurrentUser();
+  if (!currentUser) {
+    return NextResponse.json(
+      { status: false, message: "Not logged in" },
+      { status: 401 },
     );
   }
 
   await db();
-  // $inc atomically bumps the vote count — avoids a read-then-write race
-  // if two people vote on the same drawing at nearly the same time.
-  const drawing = await Drawing.findByIdAndUpdate(
-    id,
-    { $inc: { [`votes.${votedFor}`]: 1 } },
-    { new: true }
+
+  const drawing = await Drawing.findOneAndUpdate(
+    { _id: id, votedBy: { $nin: [currentUser._id] } },
+    {
+      $inc: { "votes.user": 1 },
+      $push: { votedBy: currentUser._id },
+    },
+    { returnDocument: "after" },
   );
 
   if (!drawing) {
+    const exists = await Drawing.findById(id);
     return NextResponse.json(
-      { status: false, message: "Drawing not found" },
-      { status: 404 }
+      {
+        status: false,
+        message: exists ? "Already voted" : "Drawing not found",
+      },
+      { status: exists ? 400 : 404 },
     );
   }
 

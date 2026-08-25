@@ -10,11 +10,19 @@ import toast from "react-hot-toast";
 // time, stored in /public or on Cloudinary). This is NOT AI-generated —
 // it's just a static image swapped in based on the prompt, like you wanted.
 const CHALLENGES = [
-  { prompt: "a cat", computerDrawing: "/computer-drawings/cat.png" },
-  { prompt: "a house", computerDrawing: "/computer-drawings/house.png" },
-  { prompt: "a tree", computerDrawing: "/computer-drawings/tree.png" },
-  { prompt: "a car", computerDrawing: "/computer-drawings/car.png" },
-  { prompt: "a fish", computerDrawing: "/computer-drawings/fish.png" },
+  { prompt: "best cat ever", computerDrawing: "/computer-drawings/best-cat-ever.png" },
+  { prompt: "nostalgia", computerDrawing: "/computer-drawings/nostalgia.png" },
+  { prompt: "person eating apple with fork", computerDrawing: "/computer-drawings/person-eating-apple-with-fork.png" },
+  { prompt: "something that reminds you of childhood", computerDrawing: "/computer-drawings/something-that-reminds-you-of-childhood.png" },
+  { prompt: "your favourite dish", computerDrawing: "/computer-drawings/your-favourite-dish.png" },
+  {prompt: "a cat in a spacesuit", computerDrawing: "/computer-drawings/a-cat-in-a-spacesuit.png" },
+  {prompt: "a slice of pizza eating a human" , computerDrawing: "/computer-drawings/a-slice-of-pizza-eating-a-human.png" },
+  {prompt: "a cat that is eating your homework" , computerDrawing: "/computer-drawings/a-cat-that-is-eating-your-homework.png" },
+  {prompt: "bingus ending the world" , computerDrawing: "/computer-drawings/bingus-ending-the-world.png" },
+  {prompt: "an angry potato" , computerDrawing: "/computer-drawings/an-angry-potato.png" },
+  {prompt: "monsa lisa taking selfie with bingus",  computerDrawing: "/computer-drawings/monsa-lisa-taking-selfie"},
+  {prompt: "a cactus trying to hug you", computerDrawing: "/computer-drawings/cactus-trying-to-hug"},
+  {prompt: "a computer mouse running away from a real cat", computerDrawing:"/computer-drawings/computer-mouse"}
 ];
 
 const ROUND_SECONDS = 60; // "under 1 minute" — bump to 90 if you want the 1:30 you mentioned earlier
@@ -397,14 +405,14 @@ export default function DrawingChallenge() {
           />
         </div>
       </div>
-
+      <p className="text-lg font-bold text-green-500" > winner: Bingus 😼 <span className="font-normal text-sm"> <br></br>(bingus always wins lol) </span></p>
       {posted ? (
         <p className="text-sm font-medium text-green-600">
-          Posted! Other users can vote once they're online.
+          Posted! Other users can view and like your art!.
         </p>
       ) : (
         <p className="text-sm text-gray-500">
-          Happy with it? Post it so other users can vote later — no live judging.
+          Happy with it? Post it so other users can view it too!
         </p>
       )}
 

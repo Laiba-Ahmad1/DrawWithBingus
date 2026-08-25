@@ -18,6 +18,16 @@ export default function SignupPage() {
     e.preventDefault();
     setError("");
     setLoading(true);
+    if(gender === "Dog") {
+      toast.error("Dogs are not allowed to sign up. MEOW MEOW😡");
+      setLoading(false);
+      return;
+    }
+    if(password.length < 6) {
+      toast.error("Password must be at least 6 characters long");
+      setLoading(false);
+      return;
+    }
     try {
       const res = await fetch("/api/auth/signup", {
         method: "POST",
@@ -111,6 +121,7 @@ export default function SignupPage() {
             <option value="">-Select Gender</option>
             <option value="Male">Male</option>
             <option value="Female">Female</option>
+            <option value="Dog">Dog</option>
           </select>
         </div>
 

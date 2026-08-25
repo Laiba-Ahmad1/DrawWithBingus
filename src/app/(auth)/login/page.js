@@ -76,8 +76,13 @@ export default function LoginPage() {
           >
             {showPassword ? "Hide" : "Show"}
           </button>
+          
+            <p onClick={() => toast("Then what can I do? you goldfish brain 🐟")} className="text-black hover:underline">
+              Forgot Password?
+            </p>
+          
         </div>
-
+       
         <button
           type="submit"
           disabled={loading}
