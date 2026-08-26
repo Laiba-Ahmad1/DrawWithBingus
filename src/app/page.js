@@ -1,13 +1,15 @@
 import { getCurrentUser } from "@/lib/getCurrentuser";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import LogoutButton from "@/components/button";
 
 export default async function Home() {
   const user = await getCurrentUser();
   if (!user) redirect("/login");
 
   return (
-    <main className="w-screen h-screen overflow-hidden bg-white flex flex-col">
+    <main className="w-screen  h-dvh  overflow-hidden bg-white dark:bg-white flex flex-col"
+    style={{ colorScheme: "light" }}>
       <div className="absolute w-screen h-screen flex items-center justify-center min-h-screen z-20 animate-pop-in">
         <img
           src="/VS.png"
@@ -15,7 +17,7 @@ export default async function Home() {
           className="w-[100px] md:w-[300px] lg:w-[350px]"
         />
       </div>
-
+      <LogoutButton/>
       <div className="absolute w-screen h-screen flex justify-center items-center z-10 animate-fade-in hidden md:block">
         <img
           src="/LineHome.png"

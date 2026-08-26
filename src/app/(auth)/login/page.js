@@ -38,13 +38,13 @@ export default function LoginPage() {
 
   return (
     <form onSubmit={handleSubmit} className="relative w-full">
-      <p className="text-2xl mt-2! font-semibold text-black sm:text-3xl text-center mb-4">
+      <p className="text-2xl mt-2! font-semibold text-black dark:text-black sm:text-3xl text-center mb-4">
         Login
       </p>
 
       <div className="w-full sm:w-[88%] lg:w-[80%] mx-auto">
         <div>
-          <label className="block text-lg font-semibold text-black mb-1.5 sm:text-[20px]">
+          <label className="block text-lg font-semibold text-black dark:text-black mb-1.5 sm:text-[20px]">
             Email
           </label>
           <input
@@ -53,12 +53,12 @@ export default function LoginPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter your email"
-            className="w-full border rounded-xl px-2! h-10 outline-black border-gray-400 px-3"
+            className="w-full border rounded-xl px-2! h-10 outline-black dark:outline-black border-gray-400 px-3"
           />
         </div>
 
         <div className="relative">
-          <label className="block text-lg font-semibold text-black mb-1.5 sm:text-[20px]">
+          <label className="block text-lg font-semibold text-black dark:text-black mb-1.5 sm:text-[20px]">
             Password
           </label>
           <input
@@ -67,17 +67,17 @@ export default function LoginPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Enter your password"
-            className="w-full border rounded-xl px-2! mb-4 h-10 outline-black border-gray-400"
+            className="w-full border rounded-xl px-2! mb-4 h-10 outline-black dark:outline-black border-gray-400"
           />
           <button
             type="button"
             onClick={() => setShowPassword((s) => !s)}
-            className="absolute right-3 top-11 text-gray-400 text-sm"
+            className="absolute right-3 top-11 text-gray-400 dark:test-gray-400 text-sm"
           >
             {showPassword ? "Hide" : "Show"}
           </button>
           
-            <p onClick={() => toast("Then what can I do? you goldfish brain 🐟")} className="text-black hover:underline">
+            <p onClick={() => toast("Then what can I do? you goldfish brain 🐟")} className="text-black dark:text-black hover:underline">
               Forgot Password?
             </p>
           
@@ -86,7 +86,7 @@ export default function LoginPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full mt-33 bg-black text-white rounded-xl h-10 disabled:opacity-50 hover:bg-gray-800 hover:scale-105 transition-all duration-200 ease-in-out"
+          className="w-full mt-33 bg-black text-white dark:bg-black dark:text-white rounded-xl h-10 disabled:opacity-50 hover:bg-gray-800 hover:scale-105 transition-all duration-200 ease-in-out"
         >
           {loading ? "Logging in..." : "Login"}
         </button>
@@ -94,7 +94,7 @@ export default function LoginPage() {
         <div className="flex flex-col gap-5 items-center !mt-3">
           <p className="text-gray-500 text-[13px]">
             Don&apos;t have an account?{" "}
-            <Link href="/signup" className="text-sm text-black hover:underline">
+            <Link href="/signup" className="text-sm text-black dark:text-black hover:underline">
               Sign up
             </Link>
           </p>
