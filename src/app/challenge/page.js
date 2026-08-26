@@ -264,17 +264,31 @@ export default function DrawingChallenge() {
       console.error("Post failed:", err);
     }
   };
+  async function handleLogout() {
+    await fetch("/api/auth/logout", { method: "POST" });
+    router.push("/login");
+    router.refresh();
+  }
 
   // ── Render ─────────────────────────────────────────────────────────────
   if (phase === "ready") {
     return (
       <div className="flex flex-col items-center gap-4 p-8 text-center">
+        <div className="absolute top-6 left-3 flex gap-2">
         <Link
             href="/"
-            className="absolute top-3 left-3 shrink-0 rounded-lg bg-black px-3 py-2 text-sm font-semibold text-white hover:bg-white hover:text-black hover:border-2 hover:border-black"
+            className=" shrink-0 rounded-lg bg-black px-3 py-2 text-sm font-semibold text-white hover:bg-white hover:text-black hover:border-2 hover:border-black"
           >
             go to home
           </Link>
+          <Link
+          onClick={handleLogout}
+          className="shrink-0 rounded-lg bg-black px-3 py-2 text-sm font-semibold text-white hover:bg-white hover:text-black hover:border-2 hover:border-black"
+          href="/login"
+        >
+          Logout
+     </Link>
+     </div>
         <h2 className="text-2xl font-bold">Ready to draw?</h2>
         <p className="text-gray-600">
           You'll get a random prompt and {ROUND_SECONDS} seconds to draw it.

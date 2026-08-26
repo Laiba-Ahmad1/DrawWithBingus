@@ -2,12 +2,13 @@ import { getCurrentUser } from "@/lib/getCurrentuser";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 
+
 export default async function Home() {
   const user = await getCurrentUser();
   if (!user) redirect("/login");
 
   return (
-    <main className="w-screen h-screen overflow-hidden bg-white flex flex-col">
+    <main className="w-screen  h-dvh  overflow-hidden bg-white flex flex-col">
       <div className="absolute w-screen h-screen flex items-center justify-center min-h-screen z-20 animate-pop-in">
         <img
           src="/VS.png"
@@ -64,6 +65,7 @@ export default async function Home() {
         >
           Art Gallery
         </Link>
+        
       </div>
     </main>
   );
