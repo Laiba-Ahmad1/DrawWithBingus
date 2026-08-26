@@ -4,6 +4,7 @@ import { useRef, useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import rough from "roughjs";
 import toast from "react-hot-toast";
+import Link from "next/link";
 
 // ── Prompts + "computer" (pre-made) drawings ────────────────────────────────
 // Each prompt maps to a pre-made drawing image (drawn by you/Bingus ahead of
@@ -268,6 +269,12 @@ export default function DrawingChallenge() {
   if (phase === "ready") {
     return (
       <div className="flex flex-col items-center gap-4 p-8 text-center">
+        <Link
+            href="/"
+            className="absolute top-3 left-3 shrink-0 rounded-lg bg-black px-3 py-2 text-sm font-semibold text-white hover:bg-white hover:text-black hover:border-2 hover:border-black"
+          >
+            go to home
+          </Link>
         <h2 className="text-2xl font-bold">Ready to draw?</h2>
         <p className="text-gray-600">
           You'll get a random prompt and {ROUND_SECONDS} seconds to draw it.
