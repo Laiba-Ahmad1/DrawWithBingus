@@ -72,19 +72,16 @@ export default function PostsPage({ user }) {
     });
   }, [drawings, search]);
 
-  const vote = async (id) => {
-    const drawing = drawings.find((d) => d._id === id);
-    if (user && drawing?.votedBy?.includes(user._id)) return; // guard client-side too
-
-    try {
-      const res = await fetch(`/api/posts?id=${id}`, { method: "PATCH" });
-      const data = await res.json();
-      if (!res.ok) return console.error("Vote failed:", data.message);
-      setDrawings((prev) => prev.map((d) => (d._id === id ? data.drawing : d)));
-    } catch (err) {
-      console.error("Vote failed:", err);
-    }
-  };
+ const vote = async (id) => {
+  try {
+    const res = await fetch(`/api/posts?id=${id}`, { method: "PATCH" });
+    const data = await res.json();
+    if (!res.ok) return console.error("Vote failed:", data.message);
+    setDrawings((prev) => prev.map((d) => (d._id === id ? data.drawing : d)));
+  } catch (err) {
+    console.error("Vote failed:", err);
+  }
+};
 
   if (loading) return <p className="p-8 text-center">Loading...</p>;
 

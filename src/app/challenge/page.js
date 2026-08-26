@@ -11,7 +11,6 @@ import toast from "react-hot-toast";
 // it's just a static image swapped in based on the prompt, like you wanted.
 const CHALLENGES = [
   { prompt: "best cat ever", computerDrawing: "/computer-drawings/best-cat-ever.png" },
-  { prompt: "nostalgia", computerDrawing: "/computer-drawings/nostalgia.png" },
   { prompt: "person eating apple with fork", computerDrawing: "/computer-drawings/person-eating-apple-with-fork.png" },
   { prompt: "something that reminds you of childhood", computerDrawing: "/computer-drawings/something-that-reminds-you-of-childhood.png" },
   { prompt: "your favourite dish", computerDrawing: "/computer-drawings/your-favourite-dish.png" },
@@ -20,9 +19,9 @@ const CHALLENGES = [
   {prompt: "a cat that is eating your homework" , computerDrawing: "/computer-drawings/a-cat-that-is-eating-your-homework.png" },
   {prompt: "bingus ending the world" , computerDrawing: "/computer-drawings/bingus-ending-the-world.png" },
   {prompt: "an angry potato" , computerDrawing: "/computer-drawings/an-angry-potato.png" },
-  {prompt: "monsa lisa taking selfie with bingus",  computerDrawing: "/computer-drawings/monsa-lisa-taking-selfie"},
-  {prompt: "a cactus trying to hug you", computerDrawing: "/computer-drawings/cactus-trying-to-hug"},
-  {prompt: "a computer mouse running away from a real cat", computerDrawing:"/computer-drawings/computer-mouse"}
+  {prompt: "monsa lisa taking selfie with bingus",  computerDrawing: "/computer-drawings/monsa-lisa-taking-selfie.png"},
+  {prompt: "a cactus trying to hug you", computerDrawing: "/computer-drawings/cactus-trying-to-hug.png"},
+  {prompt: "a computer mouse running away from a real cat", computerDrawing:"/computer-drawings/computer-mouse.png"}
 ];
 
 const ROUND_SECONDS = 60; // "under 1 minute" — bump to 90 if you want the 1:30 you mentioned earlier
@@ -41,6 +40,7 @@ const COLORS = [
   "#3b82f6", // blue
   "#a855f7", // purple
   "#ec4899", // pink
+  "#B97A57", //brown
   "#ffffff", // white (acts as an eraser against the white background)
 ];
 
@@ -75,9 +75,14 @@ export default function DrawingChallenge() {
   const brushRef = useRef(BRUSH_SIZES[1].width);
 
   // ── Pick a random prompt each time the game starts ────────────────────────
+  const challengeBagRef = useRef([]);
   const startChallenge = useCallback(() => {
-    const random = CHALLENGES[Math.floor(Math.random() * CHALLENGES.length)];
-    setChallenge(random);
+    
+  if (challengeBagRef.current.length === 0) {
+    challengeBagRef.current = [...CHALLENGES].sort(() => Math.random() - 0.5);
+  }
+  const random = challengeBagRef.current.pop();
+  setChallenge(random);
     setTimeLeft(ROUND_SECONDS);
     setUserDrawingUrl(null);
     setActiveColor(COLORS[0]);
@@ -92,6 +97,7 @@ export default function DrawingChallenge() {
   // the <canvas> element actually mounts ────────────────────────────────────
   useEffect(() => {
     if (phase !== "drawing") return;
+    
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
 

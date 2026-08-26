@@ -33,7 +33,22 @@ export async function PATCH(req) {
 
   await db();
 
-  const drawing = await Drawing.findOneAndUpdate(
+  // try to UNVOTE: only matches if user is currently in votedBy
+  let drawing = await Drawing.findOneAndUpdate(
+    { _id: id, votedBy: currentUser._id },
+    {
+      $inc: { "votes.user": -1 },
+      $pull: { votedBy: currentUser._id },
+    },
+    { returnDocument: "after" },
+  );
+
+  if (drawing) {
+    return NextResponse.json({ status: true, drawing, action: "unvoted" });
+  }
+
+  // otherwise try to VOTE: only matches if user is NOT in votedBy
+  drawing = await Drawing.findOneAndUpdate(
     { _id: id, votedBy: { $nin: [currentUser._id] } },
     {
       $inc: { "votes.user": 1 },
@@ -47,11 +62,11 @@ export async function PATCH(req) {
     return NextResponse.json(
       {
         status: false,
-        message: exists ? "Already voted" : "Drawing not found",
+        message: exists ? "Vote conflict, try again" : "Drawing not found",
       },
-      { status: exists ? 400 : 404 },
+      { status: exists ? 409 : 404 },
     );
   }
 
-  return NextResponse.json({ status: true, drawing });
+  return NextResponse.json({ status: true, drawing, action: "voted" });
 }
