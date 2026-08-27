@@ -13,6 +13,13 @@
   --font-italic: var(--font-kalam);
 }
 
+@media (prefers-color-scheme: dark){
+  :root {
+  --background: #f7f6f1;
+  --foreground: #111111;
+}
+}
+
 * {
   box-sizing: border-box;
 }
@@ -20,7 +27,7 @@
 html,
 body {
   min-height: 100%;
-  background-color: white;
+  background-color: var(--background)
 }
 
 body {
