@@ -1,6 +1,7 @@
 import { getCurrentUser } from "@/lib/getCurrentuser";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import LogoutButton from "@/components/button";
 
 export default async function Home() {
   const user = await getCurrentUser();
@@ -15,7 +16,7 @@ export default async function Home() {
           className="w-[100px] md:w-[300px] lg:w-[350px]"
         />
       </div>
-
+      <LogoutButton/>
       <div className="absolute w-screen h-screen flex justify-center items-center z-10 animate-fade-in hidden md:block">
         <img
           src="/LineHome.png"
