@@ -8,7 +8,8 @@ export default async function Home() {
   if (!user) redirect("/login");
 
   return (
-    <main className="w-screen  h-dvh  overflow-hidden bg-white dark:bg-white flex flex-col">
+    <main className="w-screen  h-dvh  overflow-hidden bg-white dark:bg-white flex flex-col"
+    style={{ colorScheme: "light" }}>
       <div className="absolute w-screen h-screen flex items-center justify-center min-h-screen z-20 animate-pop-in">
         <img
           src="/VS.png"

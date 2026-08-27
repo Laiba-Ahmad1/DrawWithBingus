@@ -69,7 +69,8 @@ export default function ChallengeLayout({ children }) {
   }, []);
 
   return (
-    <main className="min-h-screen w-full overflow-y-auto flex items-center justify-center bg-zinc-50 dark:bg-zinc-50 px-4 py-6 sm:px-6 sm:py-8 relative">
+    <main className="min-h-screen w-full overflow-y-auto flex items-center justify-center bg-zinc-50 dark:bg-zinc-50 px-4 py-6 sm:px-6 sm:py-8 relative"
+    style={{ colorScheme: "light" }}>
       <canvas
         ref={bgCanvasRef}
         className="fixed inset-0 pointer-events-none "

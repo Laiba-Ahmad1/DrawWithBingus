@@ -29,10 +29,14 @@ body {
   min-height: 100%;
   background-color: var(--background)
 }
+html {
+  color-scheme: light !important;
+}
 
 body {
   margin: 0;
   background: var(--background);
+   background-color: #f9fafb !important;
   color: var(--foreground);
   font-family: var(--font-patrick), sans-serif;
 }

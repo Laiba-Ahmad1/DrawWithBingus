@@ -78,7 +78,8 @@ export default function AuthLayout({ children }) {
   }, []);
 
   return (
-    <main className="min-h-screen w-full overflow-y-auto flex items-center justify-center bg-zinc-50 px-4 py-6 sm:px-6 sm:py-8 relative dark:bg-zinc-50">
+    <main className="min-h-screen w-full overflow-y-auto flex items-center justify-center bg-zinc-50 px-4 py-6 sm:px-6 sm:py-8 relative dark:bg-zinc-50"
+    style={{ colorScheme: "light" }}>
       <canvas
         ref={bgCanvasRef}
         className="fixed inset-0 pointer-events-none"
