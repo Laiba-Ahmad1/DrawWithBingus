@@ -11,18 +11,56 @@ import Link from "next/link";
 // time, stored in /public or on Cloudinary). This is NOT AI-generated —
 // it's just a static image swapped in based on the prompt, like you wanted.
 const CHALLENGES = [
-  { prompt: "best cat ever", computerDrawing: "/computer-drawings/best-cat-ever.png" },
-  { prompt: "person eating apple with fork", computerDrawing: "/computer-drawings/person-eating-apple-with-fork.png" },
-  { prompt: "something that reminds you of childhood", computerDrawing: "/computer-drawings/something-that-reminds-you-of-childhood.png" },
-  { prompt: "your favourite dish", computerDrawing: "/computer-drawings/your-favourite-dish.png" },
-  {prompt: "a cat in a spacesuit", computerDrawing: "/computer-drawings/a-cat-in-a-spacesuit.png" },
-  {prompt: "a slice of pizza eating a human" , computerDrawing: "/computer-drawings/a-slice-of-pizza-eating-a-human.png" },
-  {prompt: "a cat that is eating your homework" , computerDrawing: "/computer-drawings/a-cat-that-is-eating-your-homework.png" },
-  {prompt: "bingus ending the world" , computerDrawing: "/computer-drawings/bingus-ending-the-world.png" },
-  {prompt: "an angry potato" , computerDrawing: "/computer-drawings/an-angry-potato.png" },
-  {prompt: "monsa lisa taking selfie with bingus",  computerDrawing: "/computer-drawings/monsa-lisa-taking-selfie.png"},
-  {prompt: "a cactus trying to hug you", computerDrawing: "/computer-drawings/cactus-trying-to-hug.png"},
-  {prompt: "a computer mouse running away from a real cat", computerDrawing:"/computer-drawings/computer-mouse.png"}
+  {
+    prompt: "best cat ever",
+    computerDrawing: "/computer-drawings/best-cat-ever.png",
+  },
+  {
+    prompt: "person eating apple with fork",
+    computerDrawing: "/computer-drawings/person-eating-apple-with-fork.png",
+  },
+  {
+    prompt: "something that reminds you of childhood",
+    computerDrawing:
+      "/computer-drawings/something-that-reminds-you-of-childhood.png",
+  },
+  {
+    prompt: "your favourite dish",
+    computerDrawing: "/computer-drawings/your-favourite-dish.png",
+  },
+  {
+    prompt: "a cat in a spacesuit",
+    computerDrawing: "/computer-drawings/a-cat-in-a-spacesuit.png",
+  },
+  {
+    prompt: "a slice of pizza eating a human",
+    computerDrawing: "/computer-drawings/a-slice-of-pizza-eating-a-human.png",
+  },
+  {
+    prompt: "a cat that is eating your homework",
+    computerDrawing:
+      "/computer-drawings/a-cat-that-is-eating-your-homework.png",
+  },
+  {
+    prompt: "bingus ending the world",
+    computerDrawing: "/computer-drawings/bingus-ending-the-world.png",
+  },
+  {
+    prompt: "an angry potato",
+    computerDrawing: "/computer-drawings/an-angry-potato.png",
+  },
+  {
+    prompt: "monsa lisa taking selfie with bingus",
+    computerDrawing: "/computer-drawings/monsa-lisa-taking-selfie.png",
+  },
+  {
+    prompt: "a cactus trying to hug you",
+    computerDrawing: "/computer-drawings/cactus-trying-to-hug.png",
+  },
+  {
+    prompt: "a computer mouse running away from a real cat",
+    computerDrawing: "/computer-drawings/computer-mouse.png",
+  },
 ];
 
 const ROUND_SECONDS = 60; // "under 1 minute" — bump to 90 if you want the 1:30 you mentioned earlier
@@ -63,6 +101,7 @@ export default function DrawingChallenge() {
   const [activeColor, setActiveColor] = useState(COLORS[0]);
   const [activeBrush, setActiveBrush] = useState(BRUSH_SIZES[1]); // default to "M"
   const [posted, setPosted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const canvasRef = useRef(null);
   const isDrawingRef = useRef(false);
@@ -78,12 +117,11 @@ export default function DrawingChallenge() {
   // ── Pick a random prompt each time the game starts ────────────────────────
   const challengeBagRef = useRef([]);
   const startChallenge = useCallback(() => {
-    
-  if (challengeBagRef.current.length === 0) {
-    challengeBagRef.current = [...CHALLENGES].sort(() => Math.random() - 0.5);
-  }
-  const random = challengeBagRef.current.pop();
-  setChallenge(random);
+    if (challengeBagRef.current.length === 0) {
+      challengeBagRef.current = [...CHALLENGES].sort(() => Math.random() - 0.5);
+    }
+    const random = challengeBagRef.current.pop();
+    setChallenge(random);
     setTimeLeft(ROUND_SECONDS);
     setUserDrawingUrl(null);
     setActiveColor(COLORS[0]);
@@ -98,7 +136,7 @@ export default function DrawingChallenge() {
   // the <canvas> element actually mounts ────────────────────────────────────
   useEffect(() => {
     if (phase !== "drawing") return;
-    
+
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
 
@@ -134,7 +172,7 @@ export default function DrawingChallenge() {
     const margin = 20; // room for the bow to extend past the 0–500 box
     svg.setAttribute(
       "viewBox",
-      `${-margin} ${-margin} ${500 + margin * 2} ${500 + margin * 2}`
+      `${-margin} ${-margin} ${500 + margin * 2} ${500 + margin * 2}`,
     );
     svg.innerHTML = ""; // clear the previous sketch before redrawing
 
@@ -242,54 +280,47 @@ export default function DrawingChallenge() {
   // always fires onSubmit so you can save the drawing either way, but
   // onPost only fires if the user actively chooses to put it up for voting.
   const postForVoting = async () => {
+    setLoading(true);
     try {
       const res = await fetch("/api/challenge", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({  
-        prompt: challenge.prompt,
-        userDrawing: userDrawingUrl,
-        computerDrawing: challenge.computerDrawing
-      })
-    });
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          prompt: challenge.prompt,
+          userDrawing: userDrawingUrl,
+          computerDrawing: challenge.computerDrawing,
+        }),
+      });
       const data = await res.json();
       if (!res.ok) {
         console.error("Post failed:", data.error);
+        setLoading(false);
         return;
       }
       setPosted(true);
-      toast.success("Posted for voting! Other users can vote once they're online.");
+      setLoading(false);
+      toast.success(
+        "Posted for voting! Other users can vote once they're online.",
+      );
       router.push("/posts");
     } catch (err) {
       console.error("Post failed:", err);
+      setLoading(false);
     }
   };
-  async function handleLogout() {
-    await fetch("/api/auth/logout", { method: "POST" });
-    router.push("/login");
-    router.refresh();
-  }
-
   // ── Render ─────────────────────────────────────────────────────────────
   if (phase === "ready") {
     return (
       <div className="flex flex-col items-center gap-4 p-8 text-center">
         <div className="absolute top-6 left-3 flex gap-2">
-        <Link
+          <Link
             href="/"
             className=" shrink-0 rounded-lg bg-black px-3 py-2 text-sm font-semibold text-white hover:bg-white hover:text-black hover:border-2 hover:border-black"
           >
             go to home
           </Link>
-          <Link
-          onClick={handleLogout}
-          className="shrink-0 rounded-lg bg-black px-3 py-2 text-sm font-semibold text-white hover:bg-white hover:text-black hover:border-2 hover:border-black"
-          href="/login"
-        >
-          Logout
-     </Link>
-     </div>
-        <h2 className="text-2xl font-bold">Ready to draw?</h2>
+        </div>
+        <h2 className="text-2xl font-bold dark:text-black">Ready to draw?</h2>
         <p className="text-gray-600">
           You'll get a random prompt and {ROUND_SECONDS} seconds to draw it.
           Bingus is drawing too — let's see who does better.
@@ -308,7 +339,7 @@ export default function DrawingChallenge() {
     return (
       <div className="flex flex-col items-center gap-3 p-3 sm:p-4">
         <div className="flex w-full max-w-[500px] flex-col items-center gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-0">
-          <span className="text-base font-semibold sm:text-lg">
+          <span className="text-base font-semibold sm:text-lg dark:text-black">
             Draw: <span className="text-purple-600">{challenge.prompt}</span>
           </span>
           <span
@@ -411,8 +442,11 @@ export default function DrawingChallenge() {
   // phase === "done" — side-by-side reveal, plus the option to post for voting
   return (
     <div className="flex flex-col items-center gap-2 p-4 sm:p-8">
-      <h2 className="text-lg sm:text-xl">
-        Prompt was: <span className="font-bold text-black">{challenge.prompt}</span>
+      <h2 className="text-lg sm:text-xl dark:text-black">
+        Prompt was:{" "}
+        <span className="font-bold text-black dark:text-black">
+          {challenge.prompt}
+        </span>
       </h2>
       <div className="flex w-full w-[540px] flex-col md:flex-row items-center justify-center gap-3 sm:gap-6">
         <div className="flex w-full flex-1 flex-col items-center gap-2 md:w-auto">
@@ -432,7 +466,14 @@ export default function DrawingChallenge() {
           />
         </div>
       </div>
-      <p className="text-lg font-bold text-green-500" > winner: Bingus 😼 <span className="font-normal text-sm"> <br></br>(bingus always wins lol) </span></p>
+      <p className="text-lg font-bold text-green-500">
+        {" "}
+        winner: Bingus 😼{" "}
+        <span className="font-normal text-sm">
+          {" "}
+          <br></br>(bingus always wins lol){" "}
+        </span>
+      </p>
       {posted ? (
         <p className="text-sm font-medium text-green-600">
           Posted! Other users can view and like your art!.
@@ -445,17 +486,17 @@ export default function DrawingChallenge() {
 
       <div className="flex w-full max-w-[400px] flex-col gap-3 px-2 sm:w-auto sm:flex-row sm:px-0">
         <button
-          onClick={postForVoting}
-          disabled={posted}
-          className="flex-1 rounded-lg bg-black px-6 py-3 font-semibold text-white hover:scale-102 disabled:cursor-not-allowed disabled:bg-purple-300 sm:flex-none"
-        >
-          {posted ? "Posted" : "Post"}
-        </button>
-        <button
           onClick={playAgain}
           className="flex-1 rounded-lg border border-gray-300 px-6 py-3 font-semibold hover:bg-gray-100 sm:flex-none"
         >
           Play Again
+        </button>
+        <button
+          onClick={postForVoting}
+          disabled={posted || loading}
+          className="flex-1 rounded-lg bg-black px-6 py-3 font-semibold text-white hover:scale-102 disabled:cursor-not-allowed disabled:bg-purple-300 sm:flex-none"
+        >
+          {loading ? "posting.." : "post"}
         </button>
       </div>
     </div>

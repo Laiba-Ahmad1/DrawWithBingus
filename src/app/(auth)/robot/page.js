@@ -19,20 +19,20 @@ export default function RobotPage() {
 
   return (
     <main className="flex justify-center items-center flex-col gap-30"> 
-    <h1 className="font-main font-bold text-5xl">Verify you are not a robot :-3</h1>
+    <h1 className="font-main font-bold text-5xl dark:text-black">Verify you are not a robot :-3</h1>
     <div>
         <form onSubmit={handleSubmit}>
-    <label className="text-2xl">Question: Who is the best cat in the entire Universe?</label>
+    <label className="text-2xl dark:text-black">Question: Who is the best cat in the entire Universe?</label>
     <input
             type="text"
             required
             placeholder="Enter your answer"
             onChange={(e) => setAnswer(e.target.value)}
-            className="w-full border-3 !px-2 h-10 outline-black border-black px-3"
+            className="w-full border-3 !px-2 h-10 outline-black dark:outline-black dark:border-black border-black dark:text-black px-3"
           />
     <button
     type="submit"
-    className="mt-4 w-[30%] bg-black text-white rounded-xl h-10 disabled:opacity-50  hover:scale-105 transition-all duration-200 ease-in-out"
+    className="mt-4 w-[30%] bg-black dark:bg-black text-white dark:text-white rounded-xl h-10 disabled:opacity-50  hover:scale-105 transition-all duration-200 ease-in-out"
     >Submit 🥰</button>
     </form>
     </div>

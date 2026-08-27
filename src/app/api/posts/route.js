@@ -4,12 +4,53 @@ import Drawing from "@/models/Drawing";
 import { getCurrentUser } from "@/lib/getCurrentuser";
 
 //gets all the drawing plus populates the userId field with the name of the user who posted it
-export async function GET() {
+export async function GET(req) {
   await db();
+  const { searchParams } = new URL(req.url);
+  const sort = searchParams.get("sort");
+  const sortOrder =
+    sort === "likes" ? { "votes.user": -1, createdAt: -1 } : { createdAt: -1 };
+
   const drawings = await Drawing.find()
-    .sort({ createdAt: -1 })
+    .sort(sortOrder)
     .populate("userId", "name");
   return NextResponse.json({ status: true, drawings });
+}
+
+export async function DELETE(req) {
+  const { searchParams } = new URL(req.url);
+  const id = searchParams.get("id");
+
+  if (!id) {
+    return NextResponse.json(
+      { status: false, message: "Missing id" },
+      { status: 400 },
+    );
+  }
+
+  const currentUser = await getCurrentUser();
+  if (!currentUser) {
+    return NextResponse.json(
+      { status: false, message: "Not logged in" },
+      { status: 401 },
+    );
+  }
+
+  await db();
+
+  const drawing = await Drawing.findOneAndDelete({
+    _id: id,
+    userId: currentUser._id,
+  });
+
+  if (!drawing) {
+    return NextResponse.json(
+      { status: false, message: "Drawing not found" },
+      { status: 404 },
+    );
+  }
+
+  return NextResponse.json({ status: true, message: "Drawing deleted" });
 }
 
 export async function PATCH(req) {

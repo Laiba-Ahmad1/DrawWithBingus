@@ -52,7 +52,7 @@ export default function SignupPage() {
 
   return (
     <form onSubmit={handleSubmit} className="relative w-full">
-      <p className="text-2xl mt-2! font-semibold text-black sm:text-3xl text-center mb-4">
+      <p className="text-2xl mt-2! font-semibold text-black dark:text-black sm:text-3xl text-center mb-4">
         Create Account
       </p>
 
@@ -60,7 +60,7 @@ export default function SignupPage() {
         {error && <p className="text-sm text-red-600 -mt-6 mb-2">{error}</p>}
 
         <div>
-          <label className="block text-lg font-semibold text-black mb-1.5 sm:text-[20px]">
+          <label className="block text-lg font-semibold text-black dark:text-black mb-1.5 sm:text-[20px]">
             Full Name
           </label>
           <input
@@ -69,12 +69,12 @@ export default function SignupPage() {
             value={user}
             onChange={(e) => setUser(e.target.value)}
             placeholder="Enter your Full name"
-            className="w-full border rounded-xl !px-2 h-10 outline-black border-gray-400 px-3"
+            className="w-full border rounded-xl !px-2 h-10 outline-black dark:outline-black border-gray-400 px-3"
           />
         </div>
 
         <div>
-          <label className="block text-lg font-semibold text-black mb-1.5 sm:text-[20px]">
+          <label className="block text-lg font-semibold text-black dark:text-black mb-1.5 sm:text-[20px]">
             Email
           </label>
           <input
@@ -83,12 +83,12 @@ export default function SignupPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter your email"
-            className="w-full border rounded-xl !px-2 h-10 outline-black border-gray-400 px-3"
+            className="w-full border rounded-xl !px-2 h-10 outline-black dark:outline-black dark:text-black border-gray-400 px-3"
           />
         </div>
 
         <div className="relative">
-          <label className="block text-lg font-semibold text-black mb-1.5 sm:text-[20px]">
+          <label className="block text-lg font-semibold text-black dark:text-black mb-1.5 sm:text-[20px]">
             Password
           </label>
           <input
@@ -97,7 +97,7 @@ export default function SignupPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Enter your password"
-            className="w-full border rounded-xl !px-2 mb-4 h-10 outline-black border-gray-400"
+            className="w-full border rounded-xl !px-2 mb-4 h-10 outline-black dark:outline-black dark:text-black border-gray-400"
           />
           <button
             type="button"
@@ -109,14 +109,14 @@ export default function SignupPage() {
         </div>
 
         <div className="flex flex-col gap-1 lg:flex-row lg:items-center lg:gap-10">
-          <label className="block text-lg font-semibold text-black mb-1.5 sm:text-[20px]">
+          <label className="block text-lg font-semibold text-black dark:text-black mb-1.5 sm:text-[20px]">
             Gender
           </label>
           <select
             value={gender}
             onChange={(e) => setGender(e.target.value)}
             required
-            className="w-full border rounded-xl p-3 mb-4 h-15 outline-black border-gray-400 text-gray-500"
+            className="w-full border rounded-xl p-3 mb-4 h-15 outline-black dark:outline-black dark:text-black border-gray-400 text-gray-500"
           >
             <option value="">-Select Gender</option>
             <option value="Male">Male</option>
@@ -128,7 +128,7 @@ export default function SignupPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-black text-white rounded-xl h-10 disabled:opacity-50 hover:bg-gray-800 hover:scale-105 transition-all duration-200 ease-in-out"
+          className="w-full bg-black dark:bg-black dark:text-white text-white rounded-xl h-10 disabled:opacity-50 hover:bg-gray-800 hover:scale-105 transition-all duration-200 ease-in-out"
         >
           {loading ? "Signing up..." : "Sign Up"}
         </button>

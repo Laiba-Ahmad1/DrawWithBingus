@@ -78,7 +78,7 @@ export default function AuthLayout({ children }) {
   }, []);
 
   return (
-    <main className="min-h-screen w-full overflow-y-auto flex items-center justify-center bg-zinc-50 px-4 py-6 sm:px-6 sm:py-8 relative">
+    <main className="min-h-screen w-full overflow-y-auto flex items-center justify-center bg-zinc-50 px-4 py-6 sm:px-6 sm:py-8 relative dark:bg-zinc-50">
       <canvas
         ref={bgCanvasRef}
         className="fixed inset-0 pointer-events-none"
@@ -98,7 +98,7 @@ export default function AuthLayout({ children }) {
       </div>
       <div
         ref={cardRef}
-        className="relative w-full sm:max-w-md lg:w-[30%] min-h-[480px] lg:min-h-[580px] bg-zinc-50 flex flex-col items-center gap-6 justify-center px-4 py-8 sm:gap-10 sm:px-8"
+        className="relative w-full sm:max-w-md lg:w-[30%] min-h-[480px] lg:min-h-[580px] bg-zinc-50 dark:bg-white flex flex-col items-center gap-6 justify-center px-4 py-8 sm:gap-10 sm:px-8"
         style={{ zIndex: 1 }}
       >
         <canvas

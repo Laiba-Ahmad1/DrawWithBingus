@@ -2,13 +2,18 @@ import { getCurrentUser } from "@/lib/getCurrentuser";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 
-
 export default async function Home() {
   const user = await getCurrentUser();
   if (!user) redirect("/login");
 
   return (
-    <main className="w-screen  h-dvh  overflow-hidden bg-white flex flex-col">
+    <main className="w-screen  h-dvh  overflow-hidden bg-white dark:bg-white flex flex-col">
+      <Link
+        href="/api/auth/logout"
+        className="animate-fade-in-button absolute top-6 right-3 z-30 shrink-0 rounded-lg bg-black px-3 py-2 text-sm font-semibold text-white hover:bg-white hover:text-black hover:border-2 hover:border-black"
+      >
+        Logout
+      </Link>
       <div className="absolute w-screen h-screen flex items-center justify-center min-h-screen z-20 animate-pop-in">
         <img
           src="/VS.png"
@@ -65,7 +70,6 @@ export default async function Home() {
         >
           Art Gallery
         </Link>
-        
       </div>
     </main>
   );
