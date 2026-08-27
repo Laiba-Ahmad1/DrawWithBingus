@@ -308,6 +308,12 @@ export default function DrawingChallenge() {
       setLoading(false);
     }
   };
+  async function handleLogout() {
+    await fetch("/api/auth/logout", { method: "POST" });
+    router.push("/login");
+    router.refresh();
+  }
+
   // ── Render ─────────────────────────────────────────────────────────────
   if (phase === "ready") {
     return (
@@ -318,6 +324,13 @@ export default function DrawingChallenge() {
             className=" shrink-0 rounded-lg bg-black px-3 py-2 text-sm font-semibold text-white hover:bg-white hover:text-black hover:border-2 hover:border-black"
           >
             go to home
+          </Link>
+          <Link
+            onClick={handleLogout}
+            className="shrink-0 rounded-lg bg-black px-3 py-2 text-sm font-semibold text-white hover:bg-white hover:text-black hover:border-2 hover:border-black"
+            href="/login"
+          >
+            Logout
           </Link>
         </div>
         <h2 className="text-2xl font-bold dark:text-black">Ready to draw?</h2>
