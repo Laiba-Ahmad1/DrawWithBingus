@@ -69,6 +69,11 @@ const ROUND_SECONDS = 60; // "under 1 minute" — bump to 90 if you want the 1:3
 // not a manually-synced offset between two separately-positioned elements.
 const BORDER_PAD = 6;
 
+// Max undo steps kept in memory — capped so someone drawing for the full
+// 60 seconds with lots of tiny strokes doesn't quietly balloon memory with
+// full-canvas snapshots.
+const MAX_HISTORY = 30;
+
 // ── Color palette ────────────────────────────────────────────────────────
 const COLORS = [
   "#111111", // black (default)
@@ -102,6 +107,10 @@ export default function DrawingChallenge() {
   const [activeBrush, setActiveBrush] = useState(BRUSH_SIZES[1]); // default to "M"
   const [posted, setPosted] = useState(false);
   const [loading, setLoading] = useState(false);
+  // tracks whether there's anything to undo, purely to grey out the button —
+  // the actual undo stack lives in historyRef, not in state (state would
+  // re-render on every single stroke otherwise)
+  const [canUndo, setCanUndo] = useState(false);
 
   const canvasRef = useRef(null);
   const isDrawingRef = useRef(false);
@@ -113,6 +122,9 @@ export default function DrawingChallenge() {
   const colorRef = useRef(COLORS[0]);
   // Same reasoning for brush size.
   const brushRef = useRef(BRUSH_SIZES[1].width);
+  // Stack of ImageData snapshots, one pushed right before each stroke starts.
+  // Undo pops the most recent one back onto the canvas.
+  const historyRef = useRef([]);
 
   // ── Pick a random prompt each time the game starts ────────────────────────
   const challengeBagRef = useRef([]);
@@ -129,6 +141,8 @@ export default function DrawingChallenge() {
     setActiveBrush(BRUSH_SIZES[1]);
     brushRef.current = BRUSH_SIZES[1].width;
     setPosted(false);
+    historyRef.current = []; // new round — old undo history is meaningless
+    setCanUndo(false);
     setPhase("drawing");
   }, []);
 
@@ -223,6 +237,16 @@ export default function DrawingChallenge() {
     e.preventDefault();
     isDrawingRef.current = true;
     lastPointRef.current = getPos(e);
+
+    // Snapshot the canvas as it looked BEFORE this stroke, so undo can
+    // restore to exactly that state. One snapshot per stroke (not per
+    // pixel/segment), so undo removes a whole pen-down-to-pen-up motion —
+    // matches what people expect an undo button to do.
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    historyRef.current.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
+    if (historyRef.current.length > MAX_HISTORY) historyRef.current.shift();
+    setCanUndo(true);
   };
 
   const handleMove = (e) => {
@@ -256,11 +280,22 @@ export default function DrawingChallenge() {
     isDrawingRef.current = false;
   };
 
+  const undo = () => {
+    const last = historyRef.current.pop();
+    if (!last) return; // nothing to undo
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    ctx.putImageData(last, 0, 0);
+    setCanUndo(historyRef.current.length > 0);
+  };
+
   const clearCanvas = () => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
     ctx.fillStyle = "#ffffff";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+    historyRef.current = []; // clearing is a hard reset, not an undoable step
+    setCanUndo(false);
   };
 
   // ── End the round: export canvas, stop timer, move to reveal screen ───────
@@ -423,6 +458,13 @@ export default function DrawingChallenge() {
         </div>
 
         <div className="flex w-full max-w-[500px] gap-3 px-2 sm:w-auto sm:px-0">
+          <button
+            onClick={undo}
+            disabled={!canUndo}
+            className="flex-1 rounded-lg border border-gray-300 px-4 py-2 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40 sm:flex-none"
+          >
+            Undo
+          </button>
           <button
             onClick={clearCanvas}
             className="flex-1 rounded-lg border border-gray-300 px-4 py-2 hover:bg-gray-100 sm:flex-none"

@@ -18,12 +18,12 @@ export default function SignupPage() {
     e.preventDefault();
     setError("");
     setLoading(true);
-    if(gender === "Dog") {
+    if (gender === "Dog") {
       toast.error("Dogs are not allowed to sign up. MEOW MEOW😡");
       setLoading(false);
       return;
     }
-    if(password.length < 6) {
+    if (password.length < 6) {
       toast.error("Password must be at least 6 characters long");
       setLoading(false);
       return;
@@ -61,14 +61,14 @@ export default function SignupPage() {
 
         <div>
           <label className="block text-lg font-semibold text-black dark:text-black mb-1.5 sm:text-[20px]">
-            Full Name
+            First Name
           </label>
           <input
             type="text"
             required
             value={user}
             onChange={(e) => setUser(e.target.value)}
-            placeholder="Enter your Full name"
+            placeholder="Enter your First name"
             className="w-full border rounded-xl !px-2 h-10 outline-black dark:outline-black border-gray-400 px-3"
           />
         </div>

@@ -154,7 +154,7 @@ export default function PostsPage({ user }) {
         <div className="flex w-full max-w-2xl items-center gap-2">
           <Link
             href="/"
-            className="shrink-0 rounded-lg bg-white px-3 py-2 text-sm font-semibold text-black hover:bg-gray-200"
+            className="shrink-0  bg-white px-3 py-2 text-sm font-semibold text-black hover:bg-gray-200"
           >
             go to Home
           </Link>
@@ -234,7 +234,7 @@ export default function PostsPage({ user }) {
                     <div className="flex flex-wrap items-center justify-center gap-3.5">
                       <button
                         onClick={() => vote(d._id)}
-                        className={`rounded-lg px-4 py-1.5 text-sm font-semibold transition-colors ${
+                        className={` px-4 py-1.5 text-sm font-semibold transition-colors ${
                           hasVoted
                             ? "bg-white text-black border-2 border-black"
                             : "bg-black text-white"
@@ -246,7 +246,7 @@ export default function PostsPage({ user }) {
                         <button
                           onClick={() => setDeleteConfirmationId(d._id)}
                           disabled={deletingId === d._id}
-                          className="border-2  bg-red-700 rounded-lg px-3 py-1.5 text-sm font-semibold text-white  hover:bg-red-900 transition-colors   disabled:cursor-wait disabled:opacity-50"
+                          className="border-2  bg-red-700  px-3 py-1.5 text-sm font-semibold text-white  hover:bg-red-900 transition-colors   disabled:cursor-wait disabled:opacity-50"
                         >
                           {deletingId === d._id ? "Deleting..." : "Delete"}
                         </button>
