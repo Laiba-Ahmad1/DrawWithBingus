@@ -75,18 +75,23 @@ export default function PostsPage({ user }) {
     });
   }, [drawings, search]);
 
-  const vote = async (id) => {
-    try {
-      const res = await fetch(`/api/posts?id=${id}`, { method: "PATCH" });
-      const data = await res.json();
-      if (!res.ok) return console.error("Vote failed:", data.message);
-      const refreshed = await fetch(`/api/posts?sort=${sort}`);
-      const refreshedData = await refreshed.json();
-      if (refreshed.ok) setDrawings(refreshedData.drawings);
-    } catch (err) {
-      console.error("Vote failed:", err);
-    }
-  };
+  const [votingId, setVotingId] = useState(null);
+
+const vote = async (id) => {
+  setVotingId(id);
+  try {
+    const res = await fetch(`/api/posts?id=${id}`, { method: "PATCH" });
+    const data = await res.json();
+    if (!res.ok) return console.error("Vote failed:", data.message);
+    const refreshed = await fetch(`/api/posts?sort=${sort}`);
+    const refreshedData = await refreshed.json();
+    if (refreshed.ok) setDrawings(refreshedData.drawings);
+  } catch (err) {
+    console.error("Vote failed:", err);
+  } finally {
+    setVotingId(null);
+  }
+};
 
   const deletePost = async () => {
     const id = deleteConfirmationId;
@@ -233,15 +238,16 @@ export default function PostsPage({ user }) {
                     />
                     <div className="flex flex-wrap items-center justify-center gap-3.5">
                       <button
-                        onClick={() => vote(d._id)}
-                        className={` px-4 py-1.5 text-sm font-semibold transition-colors ${
-                          hasVoted
-                            ? "bg-white text-black border-2 border-black"
-                            : "bg-black text-white"
-                        }`}
-                      >
-                        Likes ({d.votes.user})
-                      </button>
+  onClick={() => vote(d._id)}
+  disabled={votingId === d._id}
+  className={`px-4 py-1.5 text-sm font-semibold transition-colors disabled:cursor-wait disabled:opacity-50 ${
+    hasVoted
+      ? "bg-white text-black border-2 border-black"
+      : "bg-black text-white"
+  }`}
+>
+  {votingId === d._id ? "Liking..." : `Likes (${d.votes.user})`}
+</button>
                       {canDelete && (
                         <button
                           onClick={() => setDeleteConfirmationId(d._id)}
